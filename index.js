@@ -25,7 +25,11 @@ let setCategory = categoryTitle => {
 };
 
 let getRandomClue = async () => {
-  const response = await fetch("http://jservice.io/api/random?count=1");
+  const response = await fetch("https://cors-anywhere.herokuapp.com/http://jservice.io/api/random?count=1", {
+    headers: {
+      'Origin': 'https://benhamilto.github.io/jeopardy-in-a-flash/'
+    }
+  });
   const clueArr = await response.json();
   const clue = clueArr[0];
 
