@@ -11,15 +11,19 @@
     <title>Jeopardy in a flash</title>
   </head>
   <body>
-    <div id="category" class="category-container">
+    <div id="category" class="category-container container">
       Category
     </div>
-    <div id="question" class="clue-container" onclick="showAnswer()">
+    <div id="question" class="clue-container container" onclick="nextState()">
       <div class="box">
         Jeopardy in a flash!
       </div>
     </div>
-    <div id="answer" class="clue-container hidden" onclick="getRandomClue()">
+    <div
+      id="answer"
+      class="clue-container container hidden"
+      onclick="nextState()"
+    >
       <div class="box"></div>
     </div>
   </body>

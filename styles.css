@@ -16,19 +16,31 @@ div {
   text-shadow: 4px 4px #000;
 }
 
-.category-container {
-  font-size: 3rem;
+.container {
   display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.category-container {
+  font-size: 1.5rem;
   justify-content: center;
   align-items: center;
   height: 20vh;
 }
 
+@media only screen and (min-width: 961px) {
+  .clue-container {
+    font-size: 4rem !important;
+  }
+  .category-container {
+    font-size: 3rem !important;
+  }
+}
+
 .clue-container {
-  display: flex;
-  font-size: 4rem;
-  justify-content: center;
-  /* align-items: center; */
+  cursor: pointer;
+  font-size: 1.5rem;
   height: 80vh;
 }
 
