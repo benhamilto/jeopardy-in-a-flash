@@ -1,2 +1,2 @@
 # jeopardy-in-a-flash
-A frontend fetch Jeopardy! questions from jService (https://github.com/sottenad/jService)
+A frontend to fetch and display Jeopardy! questions from jService (https://github.com/sottenad/jService)
