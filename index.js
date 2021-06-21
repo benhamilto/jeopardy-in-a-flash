@@ -1,7 +1,7 @@
 let historyMap = new Map();
 let disableNextState = false;
 let currentClues = [];
-let baseUrl = "https://yacdn.org/proxy/http://jservice.io/api";
+let baseUrl = "http://jservice.io/api";
 
 const States = Object.freeze({
   Question: "question",
