@@ -69,7 +69,7 @@ let setCategoryText = categoryTitle => {
 
 let getRandomClue = async () => {
   const response = await fetch(
-    "{baseUrl}/random?count=1",
+    `{baseUrl}/random?count=1`,
     {
       headers: {
         Origin: "https://benhamilto.github.io/jeopardy-in-a-flash/"
