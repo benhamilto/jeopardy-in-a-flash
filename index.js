@@ -1,6 +1,7 @@
 let historyMap = new Map();
 let disableNextState = false;
 let currentClues = [];
+let baseUrl = "https://yacdn.org/proxy/http://jservice.io/api";
 
 const States = Object.freeze({
   Question: "question",
@@ -68,7 +69,7 @@ let setCategoryText = categoryTitle => {
 
 let getRandomClue = async () => {
   const response = await fetch(
-    "https://cors-anywhere.herokuapp.com/http://jservice.io/api/random?count=1",
+    "{baseUrl}/random?count=1",
     {
       headers: {
         Origin: "https://benhamilto.github.io/jeopardy-in-a-flash/"
@@ -85,7 +86,7 @@ let getRandomCategoryClues = async () => {
   const randomClue = await getRandomClue();
   const categoryId = randomClue.category.id;
   const response = await fetch(
-    `https://cors-anywhere.herokuapp.com/http://jservice.io/api/clues?category=${categoryId}`,
+    `{baseUrl}/clues?category=${categoryId}`,
     {
       headers: {
         Origin: "https://benhamilto.github.io/jeopardy-in-a-flash/"
