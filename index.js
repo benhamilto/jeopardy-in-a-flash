@@ -1,7 +1,21 @@
 let historyMap = new Map();
 let disableNextState = false;
 let currentClues = [];
-let baseUrl = "https://jservice.io/api";
+// jservice.io is offline. The replacement API is the Worker in this repo.
+// Same-origin /api is used on the Worker and in local dev; GitHub Pages calls the Worker directly.
+const HOSTED_API_ORIGIN = "https://jeopardy-in-a-flash.descriptive-perch.workers.dev";
+
+let apiBase = () => {
+  const host = window.location.hostname;
+  if (
+    host === "localhost" ||
+    host === "127.0.0.1" ||
+    host.endsWith(".workers.dev")
+  ) {
+    return `${window.location.origin}/api`;
+  }
+  return `${HOSTED_API_ORIGIN}/api`;
+};
 
 const States = Object.freeze({
   Question: "question",
@@ -67,34 +81,24 @@ let setCategoryText = categoryTitle => {
   );
 };
 
-let getRandomClue = async () => {
-  const response = await fetch(
-    `${baseUrl}/random?count=1`,
-    {
-      headers: {
-        Origin: "https://benhamilto.github.io/jeopardy-in-a-flash/"
-      }
-    }
-  );
-  const clueArr = await response.json();
-  const clue = clueArr[0];
+let readJson = async (response) => {
+  if (!response.ok) {
+    throw new Error(`Request failed (${response.status})`);
+  }
+  return response.json();
+};
 
-  return clue;
+let getRandomClue = async () => {
+  const response = await fetch(`${apiBase()}/random?count=1`);
+  const clueArr = await readJson(response);
+  return clueArr[0];
 };
 
 let getRandomCategoryClues = async () => {
   const randomClue = await getRandomClue();
   const categoryId = randomClue.category.id;
-  const response = await fetch(
-    `${baseUrl}/clues?category=${categoryId}`,
-    {
-      headers: {
-        Origin: "https://benhamilto.github.io/jeopardy-in-a-flash/"
-      }
-    }
-  );
-
-  let categoryClues = await response.json();
+  const response = await fetch(`${apiBase()}/clues?category=${categoryId}`);
+  let categoryClues = await readJson(response);
   categoryClues = categoryClues.slice(0, 5);
   return categoryClues;
 };
@@ -106,18 +110,29 @@ let nextQuestion = async () => {
 
   disableNextState = true;
 
-  let clue = currentClues.shift();
-  if (!clue) {
-    currentClues = await getRandomCategoryClues();
-    clue = currentClues.shift();
+  try {
+    let clue = currentClues.shift();
+    if (!clue) {
+      currentClues = await getRandomCategoryClues();
+      clue = currentClues.shift();
+    }
+    if (!clue || !clue.category) {
+      throw new Error("empty clue");
+    }
+
+    setQuestionText(clue.question);
+    setAnswerText(clue.answer);
+    setCategoryText(clue.category.title);
+    showQuestion();
+  } catch (error) {
+    currentClues = [];
+    setCategoryText("connection problem");
+    setQuestionText("Could not load a clue. Try again.");
+    setAnswerText("");
+    showQuestion();
+  } finally {
+    disableNextState = false;
   }
-
-  disableNextState = false;
-
-  setQuestionText(clue.question);
-  setAnswerText(clue.answer);
-  setCategoryText(clue.category.title);
-  showQuestion();
 };
 
 let nextAnswer = async () => {};
