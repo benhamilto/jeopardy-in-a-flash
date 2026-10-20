@@ -1,0 +1,18 @@
+{
+  "name": "jeopardy-in-a-flash",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "types": "wrangler types",
+    "typecheck": "tsc --noEmit",
+    "build-sql": "node scripts/build-sql.mjs",
+    "test:clean": "node --test scripts/clean.test.mjs",
+    "db:local": "node scripts/import-sql.mjs --local",
+    "db:remote": "node scripts/import-sql.mjs --remote"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "wrangler": "^4.45.0"
+  }
+}
